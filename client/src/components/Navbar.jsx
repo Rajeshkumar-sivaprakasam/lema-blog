@@ -25,10 +25,15 @@ export const Navbar = () => {
           <Link className="link" to="/?cat=food">
             <h6>Food</h6>
           </Link>
+          <Link className="link" to="/?cat=cinema">
+            <h6>Cinema</h6>
+          </Link>
           <span>John</span>
           <span>Logout</span>
           <span className="write">
-            <Link className='link' to='/write'>Write</Link>
+            <Link className="link" to="/write">
+              Write
+            </Link>
           </span>
         </div>
       </div>

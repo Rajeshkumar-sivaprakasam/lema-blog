@@ -322,6 +322,44 @@ $lightGreen: #b9e7e7;
       .item {
         border: 1px solid lightgray;
         padding: 10px;
+        flex: 1;
+        display: flex;
+        font-size: 12px;
+        flex-direction: column;
+        justify-content: space-between;
+        color: #555;
+
+        h1 {
+          font-size: 20px;
+        }
+        .file {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+        .buttons {
+          display: flex;
+          justify-content: space-between;
+          :first-child {
+            cursor: pointer;
+            color: teal;
+            border: 1px solid teal;
+            background-color: white;
+            padding: 3px 5px;
+          }
+          :last-child {
+            cursor: pointer;
+            color: white;
+            border: 1px solid white;
+            background-color: teal;
+            padding: 3px 5px;
+          }
+        }
+        .cat {
+          display: flex;
+          color: teal;
+          gap: 2px;
+          align-items: center;
+        }
       }
     }
   }
