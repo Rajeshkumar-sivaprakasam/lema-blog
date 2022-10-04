@@ -1,5 +1,5 @@
-import db from "../db.js";
-import bcrpyt from "bcrpytjs";
+import { db } from "../db.js";
+import bcrypt from "bcryptjs";
 
 export const register = (req, res) => {
   //Check user exist
@@ -10,10 +10,10 @@ export const register = (req, res) => {
     if (data.length) return res.status(409).json("User Already Exists!");
 
     //Hash the password and create a user
-    const salt = bcrpyt.genSaltSync(10);
-    const hash = bcrpyt.hashSync(req.body.password, salt);
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(req.body.password, salt);
 
-    const q = "insert into users(`usernmae`,`email`,`password`) values (?)";
+    const q = "insert into users(`username`,`email`,`password`) values (?)";
     const values = [req.body.username, req.body.email, hash];
 
     db.query(q, [values], (err, data) => {
