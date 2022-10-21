@@ -1,8 +1,7 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import baseURL from "../config.js";
 
 export const Register = () => {
   const [register, setRegister] = useState({
@@ -10,6 +9,8 @@ export const Register = () => {
     email: "",
     password: "",
   });
+  const [err, setErr] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setRegister((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -19,9 +20,9 @@ export const Register = () => {
     e.preventDefault();
     try {
       const res = await axios.post(`auth/register`, register);
-      console.log(res, "response");
+      navigate("/login");
     } catch (err) {
-      console.log("Error Occured!", err);
+      setErr(err.response.data);
     }
   };
   return (
@@ -50,9 +51,9 @@ export const Register = () => {
           onChange={handleChange}
         />
         <button onClick={hanldeSubmit}>Register</button>
-        <p>This is an error!</p>
+        {err && <p>{err}</p>}
         <span>
-          Don't have an account?&nbsp;<Link to="/login">Login</Link>
+          have an account?&nbsp;<Link to="/login">Login</Link>
         </span>
       </form>
     </div>
