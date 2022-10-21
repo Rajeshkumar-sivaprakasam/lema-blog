@@ -19,7 +19,7 @@ export const Register = () => {
   const hanldeSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`auth/register`, register);
+      await axios.post(`auth/register`, register);
       navigate("/login");
     } catch (err) {
       setErr(err.response.data);

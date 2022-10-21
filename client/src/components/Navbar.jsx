@@ -1,8 +1,22 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/authContext";
 import Logo from "../img/logo.png";
 
 export const Navbar = () => {
+  const { logout, currentUser } = useContext(AuthContext);
+  const [err, setErr] = useState("");
+
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/login");
+    } catch (e) {
+      setErr(err.response.data);
+    }
+  };
+
   return (
     <div className="navbar">
       <div className="container">
@@ -28,8 +42,10 @@ export const Navbar = () => {
           <Link className="link" to="/?cat=cinema">
             <h6>Cinema</h6>
           </Link>
-          <span>John</span>
-          <span>Logout</span>
+          <span>
+            <b>{currentUser && currentUser.username}</b>
+          </span>
+          <span onClick={handleLogout}>Logout</span>
           <span className="write">
             <Link className="link" to="/write">
               Write
