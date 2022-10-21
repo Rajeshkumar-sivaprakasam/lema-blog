@@ -50,5 +50,11 @@ export const login = (req, res) => {
   });
 };
 export const logout = (req, res) => {
-  return res.status(200).json("Logout Successfully!");
+  return res
+    .clearCookie("access_token", {
+      sameSite: "none",
+      secure: true,
+    })
+    .status(200)
+    .json("User has been logged out.");
 };
