@@ -13,7 +13,7 @@ export const Navbar = () => {
       await logout();
       navigate("/login");
     } catch (e) {
-      setErr(err.response.data);
+      // setErr(e.response.data);
     }
   };
 

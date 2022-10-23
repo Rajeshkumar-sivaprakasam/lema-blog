@@ -1,53 +1,77 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import Edit from "../img/edit.png";
 import Delete from "../img/delete.png";
 import { Menu } from "../components/Menu";
+import axios from "axios";
+import moment from "moment";
+import { useContext } from "react";
+import { AuthContext } from "../context/authContext";
 
 export const Single = () => {
+  const [post, setPost] = useState({});
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { currentUser } = useContext(AuthContext);
+
+  const postId = location.pathname.split("/")[2];
+
+  // const fetchData = async () => {
+  //   try {
+  //     const res = await axios.get("/api/post");
+  //     setPosts(res.data);
+  //   } catch (e) {}
+  // };
+
+  const handleDelete = async () => {
+    console.log("post insdide delete", postId);
+    try {
+      await axios.delete(`${postId}`);
+      navigate("/");
+    } catch (e) {}
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log("post", postId);
+      try {
+        console.log("res");
+        const res = await axios.get(`${postId}`);
+        console.log("res2", res);
+
+        setPost(res.data);
+      } catch (e) {}
+    };
+
+    fetchData();
+  }, [postId]);
+
   return (
     <div className="single">
       <div className="content">
-        <img
-          src="https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-          alt="blog img"
-        />
+        {post.userImg && <img src={post.userImg} alt="blog img" />}
         <div className="user">
           <img
             src="https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
             alt="user img"
           />
           <div className="info">
-            <span>Jhon</span>
-            <p>Posted 2 days ago</p>
+            <span>{post.username}</span>
+            <p>Posted {moment(post.date).fromNow()}</p>
           </div>
+          {console.log(currentUser, "  asdasas ", post, "")}
+          {/* {currentUser.id === post.id ? ( */}
           <div className="edit">
             <Link to={`/write?edit=2`}>
               <img src={Edit} alt="edit" />
-              <img src={Delete} alt="delete" />
             </Link>
+            <img onClick={handleDelete} src={Delete} alt="delete" />
           </div>
+          {/* ) : (
+            <></>
+          )} */}
         </div>
-        <h1>Lorem ipsum dolor sit amet consectetur.</h1>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum
-          molestias tempore perspiciatis aspernatur temporibus fuga optio esse
-          nam non natus eius error ipsam cumque deserunt illo, dolorem sint, cum
-          blanditiis quam assumenda! Officiis, est? Quidem, dolore facilis ipsam
-          corrupti veniam ratione qui totam nam obcaecati natus laborum modi
-          ducimus temporibus praesentium aliquam itaque, labore officia
-          consequatur consequuntur! Ex recusandae velit facilis non blanditiis,
-          exercitationem nostrum enim, aliquid reiciendis veritatis officia
-          praesentium ipsam vel laudantium eligendi. Sapiente, nobis voluptate,
-          perferendis provident, repudiandae omnis natus cupiditate ex minima
-          quis eos quasi laudantium inventore. Soluta dolores inventore labore
-          iusto quod eos excepturi odio modi officiis eum, omnis sapiente sed
-          culpa cum ipsum libero aliquid sint eveniet ipsam voluptates quibusdam
-          nisi, ullam quam. Adipisci cumque tenetur quisquam natus, deleniti id
-          ullam. Ullam eligendi rerum tenetur, voluptatibus tempore eveniet
-          voluptate vitae optio ab ducimus totam natus, eius perspiciatis
-          asperiores nostrum aspernatur sequi. Culpa, amet iure?
-        </p>
+        <h1>{post.title}</h1>
+        <p>{post.desc}</p>
       </div>
       <Menu />
     </div>
