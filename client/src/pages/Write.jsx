@@ -1,15 +1,50 @@
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
+import moment from "moment";
 
 export const Write = () => {
-  const [value, setValue] = useState("");
-  const [title, setTitle] = useState("");
-  const [img, setImg] = useState("");
-  const [cat, setCat] = useState("");
+  const state = useLocation().state;
+  const [value, setValue] = useState(state?.desc || "");
+  const [title, setTitle] = useState(state?.tilte || "");
+  const [file, setFile] = useState(null);
+  const [cat, setCat] = useState(state?.cat || "");
+
+  const upload = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await axios.post("/upload", formData);
+      return res.data;
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const handlePublish = (e) => {
     e.preventDefault();
+    const imgURL = upload();
+
+    try {
+      state
+        ? axios.put(`post/${state.id}`, {
+            title,
+            desc: value,
+            cat,
+            img: file ? imgURL : "",
+          })
+        : axios.post(`post/`, {
+            title,
+            desc: value,
+            cat,
+            img: file ? imgURL : "",
+            date: moment(Date.now()).format("YYYY-MM-DD"),
+          });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -18,6 +53,7 @@ export const Write = () => {
         <input
           type="text"
           placeholder="Title"
+          value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <div className="editorContainer">
@@ -43,7 +79,7 @@ export const Write = () => {
             type="file"
             id="file"
             name=""
-            onChange={(e) => setImg(e.target.files[0])}
+            onChange={(e) => setFile(e.target.files[0])}
           />
           <label className="file" htmlFor="file">
             Upload image
@@ -58,6 +94,7 @@ export const Write = () => {
           <div className="cat">
             <input
               type="radio"
+              checked={cat === "art"}
               name="cat"
               value="art"
               id="art"
@@ -68,6 +105,7 @@ export const Write = () => {
           <div className="cat">
             <input
               type="radio"
+              checked={cat === "science"}
               name="cat"
               value="science"
               id="science"
@@ -78,6 +116,7 @@ export const Write = () => {
           <div className="cat">
             <input
               type="radio"
+              checked={cat === "tech"}
               name="cat"
               value="tech"
               id="tech"
@@ -88,6 +127,7 @@ export const Write = () => {
           <div className="cat">
             <input
               type="radio"
+              checked={cat === "design"}
               name="cat"
               value="design"
               id="design"
@@ -98,6 +138,7 @@ export const Write = () => {
           <div className="cat">
             <input
               type="radio"
+              checked={cat === "food"}
               name="cat"
               value="food"
               id="food"
@@ -108,6 +149,7 @@ export const Write = () => {
           <div className="cat">
             <input
               type="radio"
+              checked={cat === "cinema"}
               name="cat"
               value="cinema"
               id="cinema"

@@ -61,7 +61,7 @@ export const Single = () => {
           {console.log(currentUser, "  asdasas ", post, "")}
           {/* {currentUser.id === post.id ? ( */}
           <div className="edit">
-            <Link to={`/write?edit=2`}>
+            <Link to={`/write?edit=2`} state={post}>
               <img src={Edit} alt="edit" />
             </Link>
             <img onClick={handleDelete} src={Delete} alt="delete" />
