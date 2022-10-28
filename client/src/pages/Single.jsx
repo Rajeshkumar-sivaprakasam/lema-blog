@@ -30,6 +30,12 @@ export const Single = () => {
       navigate("/");
     } catch (e) {}
   };
+
+  const getText = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       console.log("post", postId);
@@ -61,7 +67,7 @@ export const Single = () => {
           {console.log(currentUser, "  asdasas ", post, "")}
           {/* {currentUser.id === post.id ? ( */}
           <div className="edit">
-            <Link to={`/write?edit=2`} state={post}>
+            <Link to={`/write?edit=${postId}`} state={post}>
               <img src={Edit} alt="edit" />
             </Link>
             <img onClick={handleDelete} src={Delete} alt="delete" />
@@ -71,7 +77,7 @@ export const Single = () => {
           )} */}
         </div>
         <h1>{post.title}</h1>
-        <p>{post.desc}</p>
+        <p>{getText(post.desc)}</p>
       </div>
       <Menu />
     </div>

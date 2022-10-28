@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
 
 export const Write = () => {
   const state = useLocation().state;
+  console.log("State", state);
   const [value, setValue] = useState(state?.desc || "");
-  const [title, setTitle] = useState(state?.tilte || "");
-  const [file, setFile] = useState(null);
-  const [cat, setCat] = useState(state?.cat || "");
+  const [title, setTitle] = useState(state?.title || "");
+  const [file, setFile] = useState(state?.img);
+  const [cat, setCat] = useState(state?.category || "");
+  const navigate = useNavigate();
 
   const upload = async () => {
     try {
@@ -23,9 +25,9 @@ export const Write = () => {
     }
   };
 
-  const handlePublish = (e) => {
+  const handlePublish = async (e) => {
     e.preventDefault();
-    const imgURL = upload();
+    const imgURL = await upload();
 
     try {
       state
@@ -42,6 +44,8 @@ export const Write = () => {
             img: file ? imgURL : "",
             date: moment(Date.now()).format("YYYY-MM-DD"),
           });
+
+      navigate("/");
     } catch (err) {
       console.log(err);
     }
@@ -155,7 +159,7 @@ export const Write = () => {
               id="cinema"
               onChange={(e) => setCat(e.target.value)}
             />
-            <label htmlFor="cinema">Cimema</label>
+            <label htmlFor="cinema">Cinema</label>
           </div>
         </div>
       </div>

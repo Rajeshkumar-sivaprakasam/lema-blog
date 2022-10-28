@@ -42,9 +42,15 @@ export const Home = () => {
   //   } catch (e) {}
   // };
 
+  const getText = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log("hello");
         const res = await axios.get(`post${cat}`);
         setPosts(res.data);
       } catch (e) {}
@@ -59,13 +65,13 @@ export const Home = () => {
         {posts.map((post) => (
           <div className="post" key={post.id}>
             <div className="img">
-              <img src={`${post.img}`} alt="" />
+              <img src={`../../public`} alt="image missing" />
             </div>
             <div className="content">
               <Link to={`/post/${post.id}`}>
                 <h1>{post.title}</h1>
               </Link>
-              <p>{post.discription}</p>
+              <p>{getText(post.discription)}</p>
               <button>Read More</button>
             </div>
           </div>
